@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CAMPUS NEXUS · Presidency AI Helpdesk</title>
+<style>
+:root{--bg:#eef2f7;--panel:#fff;--ink:#14213d;--muted:#5b6785;--line:#d5dce8;--teal:#0f7f82;--amber:#a85f00;--amber-bg:#fff3de;--tealbg:#e2f4f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--panel:#16213a;--ink:#e8edf8;--muted:#9aa7c4;--line:#2a3855;--teal:#4fc3c6;--amber:#f0b25a;--amber-bg:#3a2c12;--tealbg:#123238}}
+:root[data-theme="dark"]{--bg:#0e1626;--panel:#16213a;--ink:#e8edf8;--muted:#9aa7c4;--line:#2a3855;--teal:#4fc3c6;--amber:#f0b25a;--amber-bg:#3a2c12;--tealbg:#123238}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
+header{max-width:1000px;margin:0 auto;padding:28px 20px 8px}
+h1{margin:0;font-size:2rem;letter-spacing:-.02em}
+header p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.layout{max-width:1000px;margin:0 auto;padding:16px 20px 32px;display:grid;grid-template-columns:240px 1fr;gap:20px}
+.topics,.chat{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.topics{padding:16px;align-self:start}
+.topics h2{margin:0 0 8px;font-size:1rem}
+ul{list-style:none;margin:0;padding:0}
+li button{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 2px;font:inherit;color:var(--ink);cursor:pointer}
+li button:hover{color:var(--teal)}
+.chat{display:flex;flex-direction:column;min-height:480px}
+.log{flex:1;padding:16px;overflow-y:auto;max-height:60vh;display:flex;flex-direction:column;gap:14px}
+.empty{color:var(--muted);margin:auto}
+.msg{max-width:85%;padding:10px 14px;border-radius:10px;white-space:pre-wrap}
+.user{align-self:flex-end;background:var(--ink);color:var(--bg)}
+.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.bot.na{background:var(--amber-bg);border-color:var(--amber)}
+.meta{display:block;margin-top:8px;font-size:.8rem;color:var(--muted)}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;margin-right:6px;background:var(--tealbg);color:var(--teal)}
+.na .tag{background:transparent;color:var(--amber);border:1px solid var(--amber)}
+form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--ink)}
+form button{padding:10px 16px;border:0;border-radius:8px;background:var(--teal);color:#fff;font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.note{font-size:.8rem;color:var(--muted);margin-top:12px}
+@media (max-width:720px){.layout{grid-template-columns:1fr}.msg{max-width:95%}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CAMPUS NEXUS</h1>
+  <p>Ask about academics, exams, placements, hostel and more. Answers come only from the sample campus data.</p>
+</header>
+<main class="layout">
+  <aside class="topics"><h2>Topics</h2><ul id="topics"></ul>
+    <p class="note">Sample competition data, not official university regulations.</p></aside>
+  <section class="chat">
+    <div id="log" class="log" aria-live="polite"><p class="empty">Pick a topic or type a question to start.</p></div>
+    <form id="form"><input id="q" placeholder="e.g. Whom should I contact for academic problems?" autocomplete="off" required><button type="submit">Ask</button></form>
+  </section>
+</main>
+<script>
+const K=[
+{id:"academics",label:"Academics",fact:"Students may contact their faculty advisor for academic-related assistance.",t:["academic","academics","faculty advisor","advisor","subject","course","syllabus","mentor","faculty","study problem","academic problem","academic help"]},
+{id:"attendance",label:"Attendance",fact:"Students should follow the minimum attendance requirement prescribed by university regulations. A numeric cutoff is not in the sample data.",t:["attendance","minimum attendance","present","shortage","bunk","absent"]},
+{id:"examinations",label:"Examinations",fact:"Examination timetables and notifications are published through official university channels. A personal exam date is not in the sample data.",t:["exam","exams","examination","timetable","time table","schedule","notification","hall ticket","results"]},
+{id:"placements",label:"Placements",fact:"Students may contact the Placement Department for training and placement-related information.",t:["placement","placements","training","internship","job","recruit","company","career","placement department"]},
+{id:"library",label:"Library",fact:"Students may access library resources according to the library\u2019s timings and regulations. Exact opening hours are not in the sample data.",t:["library","book","books","journal","reading","library timing","library hours"]},
+{id:"hostel",label:"Hostel",fact:"Hostel-related complaints should be submitted to the Hostel Administration.",t:["hostel","complaint","mess","room","warden","hostel administration"]},
+{id:"administration",label:"Administration",fact:"Students may contact the respective administrative office for certificates and student records.",t:["admin","administration","certificate","bonafide","transcript","records","student records","office","tc","document"]},
+{id:"events",label:"Events",fact:"University event announcements are shared through official communication channels. There is no live events calendar in the sample data.",t:["event","events","fest","technopia","announcement","workshop","seminar"]}];
+const NO=["exact date","exact time","my next exam","when is my next","what date is","phone number","mobile number","email address","how much fee","hostel fee","room number","library closing time","library opening","what time does","marks","sgpa","cgpa"];
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9\s]/g," ");
+function retrieve(query){
+  const q=norm(query),sc=[];
+  for(const it of K){let s=0;
+    if(new RegExp("\\b"+esc(it.id)+"\\b").test(q)||new RegExp("\\b"+esc(it.label.toLowerCase())+"\\b").test(q))s+=5;
+    for(const t of it.t)if(new RegExp("\\b"+esc(t)+"\\b").test(q))s+=t.includes(" ")?3.2:1.6;
+    if(s>0)sc.push([s,it]);}
+  sc.sort((a,b)=>b[0]-a[0]);
+  if(!sc.length)return[];
+  return sc.slice(0,3).filter(p=>p[0]>=sc[0][0]*.45).map(p=>p[1]);
+}
+function localAnswer(query){
+  const hits=retrieve(query),bad=NO.some(p=>query.toLowerCase().includes(p));
+  if(bad||!hits.length)return{ok:true,status:"unavailable",sources:hits.map(h=>h.label),model:"built-in grounded engine",
+    answer:"That specific detail is not in the supplied campus data, so I will not invent it. I can guide you on academics, examinations, placements, hostel, library, administration, attendance and events. For personal dates or unpublished numbers, please use official university channels."};
+  return{ok:true,status:"grounded",sources:hits.map(h=>h.label),model:"built-in grounded engine",answer:hits[0].fact};
+}
+async function getAnswer(query){
+  try{
+    const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
+    if(r.ok){const d=await r.json();return{ok:true,status:d.status,sources:(d.sources||[]).map(s=>s.label),model:d.model,answer:d.answer};}
+  }catch(e){}
+  return localAnswer(query);
+}
+const log=document.getElementById("log"),input=document.getElementById("q");
+function add(text,cls){log.querySelector(".empty")?.remove();const d=document.createElement("div");d.className="msg "+cls;d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d;}
+async function ask(query){
+  add(query,"user");
+  const r=await getAnswer(query);
+  const b=add(r.answer,"bot"+(r.status==="unavailable"?" na":""));
+  const m=document.createElement("span");m.className="meta";
+  const t=document.createElement("span");t.className="tag";t.textContent=r.status==="unavailable"?"Not in campus data":"Grounded";
+  m.append(t,(r.sources.join(", ")||"No source matched")+" \u00b7 "+r.model);b.append(m);
+}
+document.getElementById("form").addEventListener("submit",e=>{e.preventDefault();const q=input.value.trim();if(q){input.value="";ask(q);}});
+const ul=document.getElementById("topics");
+for(const it of K){const li=document.createElement("li"),b=document.createElement("button");b.type="button";b.textContent=it.label;b.onclick=()=>ask("Tell me about "+it.label.toLowerCase());li.append(b);ul.append(li);}
+</script>
+</body>
+</html>
