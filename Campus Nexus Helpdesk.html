@@ -1,106 +1,1104 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CAMPUS NEXUS · Presidency AI Helpdesk</title>
-<style>
-:root{--bg:#eef2f7;--panel:#fff;--ink:#14213d;--muted:#5b6785;--line:#d5dce8;--teal:#0f7f82;--amber:#a85f00;--amber-bg:#fff3de;--tealbg:#e2f4f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--panel:#16213a;--ink:#e8edf8;--muted:#9aa7c4;--line:#2a3855;--teal:#4fc3c6;--amber:#f0b25a;--amber-bg:#3a2c12;--tealbg:#123238}}
-:root[data-theme="dark"]{--bg:#0e1626;--panel:#16213a;--ink:#e8edf8;--muted:#9aa7c4;--line:#2a3855;--teal:#4fc3c6;--amber:#f0b25a;--amber-bg:#3a2c12;--tealbg:#123238}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
-header{max-width:1000px;margin:0 auto;padding:28px 20px 8px}
-h1{margin:0;font-size:2rem;letter-spacing:-.02em}
-header p{margin:4px 0 0;color:var(--muted);max-width:60ch}
-.layout{max-width:1000px;margin:0 auto;padding:16px 20px 32px;display:grid;grid-template-columns:240px 1fr;gap:20px}
-.topics,.chat{background:var(--panel);border:1px solid var(--line);border-radius:10px}
-.topics{padding:16px;align-self:start}
-.topics h2{margin:0 0 8px;font-size:1rem}
-ul{list-style:none;margin:0;padding:0}
-li button{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 2px;font:inherit;color:var(--ink);cursor:pointer}
-li button:hover{color:var(--teal)}
-.chat{display:flex;flex-direction:column;min-height:480px}
-.log{flex:1;padding:16px;overflow-y:auto;max-height:60vh;display:flex;flex-direction:column;gap:14px}
-.empty{color:var(--muted);margin:auto}
-.msg{max-width:85%;padding:10px 14px;border-radius:10px;white-space:pre-wrap}
-.user{align-self:flex-end;background:var(--ink);color:var(--bg)}
-.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
-.bot.na{background:var(--amber-bg);border-color:var(--amber)}
-.meta{display:block;margin-top:8px;font-size:.8rem;color:var(--muted)}
-.tag{display:inline-block;padding:1px 8px;border-radius:99px;margin-right:6px;background:var(--tealbg);color:var(--teal)}
-.na .tag{background:transparent;color:var(--amber);border:1px solid var(--amber)}
-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
-input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--ink)}
-form button{padding:10px 16px;border:0;border-radius:8px;background:var(--teal);color:#fff;font:inherit;cursor:pointer}
-:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
-.note{font-size:.8rem;color:var(--muted);margin-top:12px}
-@media (max-width:720px){.layout{grid-template-columns:1fr}.msg{max-width:95%}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CAMPUS NEXUS · Presidency University AI Helpdesk</title>
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --panel: #ffffff;
+      --panel-alt: #f8fafc;
+      --ink: #0f172a;
+      --ink-secondary: #475569;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0f766e;
+      --accent-light: #ccfbf1;
+      --accent-dark: #115e59;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --amber-border: #fcd34d;
+      --blue: #1d4ed8;
+      --blue-bg: #dbeafe;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --panel: #131c31;
+      --panel-alt: #1a253e;
+      --ink: #f1f5f9;
+      --ink-secondary: #cbd5e1;
+      --muted: #94a3b8;
+      --line: #22304d;
+      --accent: #2dd4bf;
+      --accent-light: #134e48;
+      --accent-dark: #14b8a6;
+      --amber: #f59e0b;
+      --amber-bg: #322108;
+      --amber-border: #78350f;
+      --blue: #60a5fa;
+      --blue-bg: #172554;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1120;
+        --panel: #131c31;
+        --panel-alt: #1a253e;
+        --ink: #f1f5f9;
+        --ink-secondary: #cbd5e1;
+        --muted: #94a3b8;
+        --line: #22304d;
+        --accent: #2dd4bf;
+        --accent-light: #134e48;
+        --accent-dark: #14b8a6;
+        --amber: #f59e0b;
+        --amber-bg: #322108;
+        --amber-border: #78350f;
+        --blue: #60a5fa;
+        --blue-bg: #172554;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.3);
+    }
+    .brand-info h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-badge {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .brand-info p {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-icon {
+      background: var(--panel-alt);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-icon:hover {
+      background: var(--line);
+    }
+
+    /* Main Layout */
+    .layout {
+      max-width: 1140px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 20px 24px;
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .topics-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .topic-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 0.88rem;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .topic-btn:hover {
+      background: var(--panel-alt);
+      border-color: var(--line);
+      color: var(--accent);
+    }
+    .topic-btn span.icon {
+      font-size: 15px;
+      width: 22px;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    /* Settings Panel */
+    .settings-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.84rem;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field-group label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .field-group input, .field-group select {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 0.82rem;
+      color: var(--ink);
+    }
+    .model-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    /* Chat Section */
+    .chat-section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 580px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .chat-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-alt);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-status-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .log {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      max-height: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(to right, var(--accent-light), var(--panel-alt));
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: var(--ink);
+    }
+    .welcome-banner h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      color: var(--accent-dark);
+    }
+    [data-theme="dark"] .welcome-banner h3 { color: var(--accent); }
+    .welcome-banner p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+    }
+
+    .chips-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--panel-alt);
+    }
+
+    /* Message Bubbles */
+    .msg {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      position: relative;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: var(--ink);
+      color: var(--bg);
+      border-bottom-right-radius: 4px;
+    }
+    .msg.bot {
+      align-self: flex-start;
+      background: var(--panel-alt);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.bot.unavailable {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+      color: var(--ink);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+    .unavailable .tag {
+      background: var(--amber-border);
+      color: var(--amber);
+    }
+
+    /* Composer */
+    .composer {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .composer input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 0.92rem;
+      background: var(--bg);
+      color: var(--ink);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .composer input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+    .composer button {
+      padding: 0 18px;
+      height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .composer button:hover {
+      background: var(--accent-dark);
+    }
+    .composer button[type="button"] {
+      background: var(--panel-alt);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 0 12px;
+    }
+    .composer button[type="button"]:hover {
+      background: var(--line);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 12px 20px 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: 1fr;
+        margin: 10px auto;
+        padding: 0 12px 20px;
+      }
+      .sidebar {
+        order: 2;
+      }
+      .chat-section {
+        min-height: 480px;
+      }
+      .msg {
+        max-width: 92%;
+      }
+    }
+  </style>
 </head>
 <body>
+
 <header>
-  <h1>CAMPUS NEXUS</h1>
-  <p>Ask about academics, exams, placements, hostel and more. Answers come only from the sample campus data.</p>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">PU</div>
+      <div class="brand-info">
+        <h1>CAMPUS NEXUS <span class="brand-badge">Presidency AI</span></h1>
+        <p>AI Helpdesk for Presidency University · Bengaluru, Karnataka</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="themeToggle" title="Toggle Dark/Light Mode">🌓</button>
+      <button class="btn-icon" id="clearBtn" title="Clear Chat">🗑️</button>
+    </div>
+  </div>
 </header>
+
 <main class="layout">
-  <aside class="topics"><h2>Topics</h2><ul id="topics"></ul>
-    <p class="note">Sample competition data, not official university regulations.</p></aside>
-  <section class="chat">
-    <div id="log" class="log" aria-live="polite"><p class="empty">Pick a topic or type a question to start.</p></div>
-    <form id="form"><input id="q" placeholder="e.g. Whom should I contact for academic problems?" autocomplete="off" required><button type="submit">Ask</button></form>
+  <!-- Left Column: Topics & Optional Settings -->
+  <aside class="sidebar">
+    <div class="card">
+      <h2>Presidency Knowledge</h2>
+      <ul class="topics-list" id="topics"></ul>
+    </div>
+
+    <div class="card">
+      <h2>AI Engine Settings</h2>
+      <div class="settings-body">
+        <div class="model-indicator">
+          <span class="status-dot"></span>
+          <span id="activeModelLabel">Presidency University AI Engine</span>
+        </div>
+        <div class="field-group">
+          <label for="groqKey">Groq API Key (Optional)</label>
+          <input id="groqKey" type="password" placeholder="gsk_... (Live Llama 3.1)">
+        </div>
+        <div class="field-group">
+          <label for="geminiKey">Gemini API Key (Optional)</label>
+          <input id="geminiKey" type="password" placeholder="AIza... (Gemini 2.0)">
+        </div>
+        <div class="field-group">
+          <label for="openaiKey">OpenAI API Key (Optional)</label>
+          <input id="openaiKey" type="password" placeholder="sk-... (GPT-4o mini)">
+        </div>
+        <p style="margin:4px 0 0;font-size:0.75rem;color:var(--muted)">Keys remain in your browser session and are never committed or logged.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Column: Interactive Chat -->
+  <section class="chat-section">
+    <div class="chat-header">
+      <div class="chat-title">
+        <span>💬 Student Consultation Console</span>
+        <span class="chat-status-pill">Strictly Grounded</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--muted)">Presidency University · CSE</div>
+    </div>
+
+    <div id="log" class="log" aria-live="polite">
+      <div class="welcome-banner">
+        <h3>Welcome to Campus Nexus! 🎓</h3>
+        <p>I am your dedicated AI helpdesk for <strong>Presidency University, Bengaluru</strong>. Ask me anything about academics, admissions, faculty advisors, exams, placements, hostel facilities, the central library, or campus life.</p>
+        <div class="chips-label">Popular student questions:</div>
+        <div class="chips">
+          <button class="chip" data-q="Tell me about Presidency University">About University</button>
+          <button class="chip" data-q="Where is Presidency University campus located?">Campus Location</button>
+          <button class="chip" data-q="Whom should I contact for academic problems?">Academic Advisor</button>
+          <button class="chip" data-q="Where can I find the examination timetable?">Exam Timetable</button>
+          <button class="chip" data-q="What is the minimum attendance requirement?">Attendance Rules</button>
+          <button class="chip" data-q="Whom should I contact for placement training?">Placements</button>
+          <button class="chip" data-q="How can I raise a hostel complaint?">Hostel Help</button>
+          <button class="chip" data-q="What facilities does the Central Library offer?">Central Library</button>
+          <button class="chip" data-q="What is the exact date of my next examination?">My Exam Date (Probe)</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="form" class="composer">
+      <input id="q" placeholder="Type your Presidency University question (e.g. Whom should I contact for academic problems?)" autocomplete="off" required>
+      <button id="mic" type="button" title="Voice Input (Speech to Text)" hidden>🎙️</button>
+      <button type="submit" id="sendBtn">Ask</button>
+    </form>
   </section>
 </main>
+
+<footer>
+  Built for <strong>TECHNOPIA 2.0 · Build It in 60 Minutes</strong> · School of Computer Science & Engineering, Presidency University, Bengaluru.
+</footer>
+
 <script>
-const K=[
-{id:"academics",label:"Academics",fact:"Students may contact their faculty advisor for academic-related assistance.",t:["academic","academics","faculty advisor","advisor","subject","course","syllabus","mentor","faculty","study problem","academic problem","academic help"]},
-{id:"attendance",label:"Attendance",fact:"Students should follow the minimum attendance requirement prescribed by university regulations. A numeric cutoff is not in the sample data.",t:["attendance","minimum attendance","present","shortage","bunk","absent"]},
-{id:"examinations",label:"Examinations",fact:"Examination timetables and notifications are published through official university channels. A personal exam date is not in the sample data.",t:["exam","exams","examination","timetable","time table","schedule","notification","hall ticket","results"]},
-{id:"placements",label:"Placements",fact:"Students may contact the Placement Department for training and placement-related information.",t:["placement","placements","training","internship","job","recruit","company","career","placement department"]},
-{id:"library",label:"Library",fact:"Students may access library resources according to the library\u2019s timings and regulations. Exact opening hours are not in the sample data.",t:["library","book","books","journal","reading","library timing","library hours"]},
-{id:"hostel",label:"Hostel",fact:"Hostel-related complaints should be submitted to the Hostel Administration.",t:["hostel","complaint","mess","room","warden","hostel administration"]},
-{id:"administration",label:"Administration",fact:"Students may contact the respective administrative office for certificates and student records.",t:["admin","administration","certificate","bonafide","transcript","records","student records","office","tc","document"]},
-{id:"events",label:"Events",fact:"University event announcements are shared through official communication channels. There is no live events calendar in the sample data.",t:["event","events","fest","technopia","announcement","workshop","seminar"]}];
-const NO=["exact date","exact time","my next exam","when is my next","what date is","phone number","mobile number","email address","how much fee","hostel fee","room number","library closing time","library opening","what time does","marks","sgpa","cgpa"];
-const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-const norm=s=>s.toLowerCase().replace(/[^a-z0-9\s]/g," ");
-function retrieve(query){
-  const q=norm(query),sc=[];
-  for(const it of K){let s=0;
-    if(new RegExp("\\b"+esc(it.id)+"\\b").test(q)||new RegExp("\\b"+esc(it.label.toLowerCase())+"\\b").test(q))s+=5;
-    for(const t of it.t)if(new RegExp("\\b"+esc(t)+"\\b").test(q))s+=t.includes(" ")?3.2:1.6;
-    if(s>0)sc.push([s,it]);}
-  sc.sort((a,b)=>b[0]-a[0]);
-  if(!sc.length)return[];
-  return sc.slice(0,3).filter(p=>p[0]>=sc[0][0]*.45).map(p=>p[1]);
+/* =========================================================================
+   PRESIDENCY UNIVERSITY KNOWLEDGE BASE & AI ENGINE
+   ========================================================================= */
+
+const PRESIDENCY_KNOWLEDGE = [
+  {
+    id: "about",
+    label: "About Presidency University",
+    icon: "🏛️",
+    summary: "Overview, approvals, location in Rajanukunte Bengaluru, and leadership.",
+    facts: [
+      "Presidency University is a private university established under the Presidency University Act (2013) by the Government of Karnataka and approved by UGC and AICTE.",
+      "The university campus is situated at Itgalpur, Rajanukunte, Yelahanka, Bengaluru, Karnataka (PIN 560064).",
+      "Presidency University comprises major academic divisions including the School of Computer Science & Engineering (host of TECHNOPIA), School of Engineering, School of Management, School of Information Science, School of Law, School of Commerce, and School of Design."
+    ],
+    triggers: [
+      "presidency university", "about university", "location", "where is", "address", "rajanukunte", "yelahanka",
+      "bangalore", "bengaluru", "ugc", "aicte", "karnataka", "campus", "established", "overview"
+    ]
+  },
+  {
+    id: "academics",
+    label: "Academics & Advisors",
+    icon: "◈",
+    summary: "Faculty advisors, courses, syllabus, and academic problem resolution.",
+    facts: [
+      "Students may contact their assigned Faculty Advisor for academic-related assistance, course selection, and mentorship.",
+      "Academic programs follow a Choice Based Credit System (CBCS) curriculum with continuous internal evaluations and end-term assessments.",
+      "For specific course syllabus or study challenges, students should consult the course instructor or department faculty advisor."
+    ],
+    triggers: [
+      "academic", "academics", "faculty advisor", "advisor", "adviser", "mentor", "faculty", "professor",
+      "teacher", "syllabus", "course", "subject", "curriculum", "study problem", "academic problem",
+      "academic help", "classes", "lecture"
+    ]
+  },
+  {
+    id: "attendance",
+    label: "Attendance Regulations",
+    icon: "◉",
+    summary: "Attendance requirements, ERP tracking, and regulations.",
+    facts: [
+      "Students should follow the minimum attendance requirement prescribed by university regulations.",
+      "A personal numeric attendance cutoff or student absence count is tracked on the official University Student ERP Portal, not in public data.",
+      "Regular attendance in both theory classes and laboratory sessions is mandatory to remain eligible for end-term university examinations."
+    ],
+    triggers: [
+      "attendance", "minimum attendance", "present", "absent", "absence", "shortage", "bunk", "leave",
+      "attendance rule", "attendance requirement", "erp attendance"
+    ]
+  },
+  {
+    id: "examinations",
+    label: "Examinations & Timetable",
+    icon: "▣",
+    summary: "Examination schedules, notifications, test patterns, and timetables.",
+    facts: [
+      "Examination timetables and notifications are published exclusively through official university communication channels and the student portal.",
+      "Specific personal exam dates, individual hall tickets, and personal seating allotments are published on the university student portal and are not in this public sample dataset.",
+      "Examinations include continuous internal evaluations (Mid-Term Tests) and Semester-End Examinations (SEE) conducted by the Office of the Controller of Examinations."
+    ],
+    triggers: [
+      "exam", "exams", "examination", "examinations", "timetable", "time table", "datesheet", "date sheet",
+      "schedule", "notification", "hall ticket", "results", "mid term", "end term", "test", "tests"
+    ]
+  },
+  {
+    id: "placements",
+    label: "Placements & Internships",
+    icon: "◇",
+    summary: "Placement Department, training programs, campus recruitment, and careers.",
+    facts: [
+      "Students may contact the Placement Department (Career Services Center) for training and placement-related information.",
+      "The placement cell provides corporate readiness training, aptitude coaching, resume building, and coordinates campus recruitment drives with leading companies.",
+      "Students looking for internships or career counseling should connect with the department placement coordinators."
+    ],
+    triggers: [
+      "placement", "placements", "training", "internship", "internships", "job", "jobs", "recruit",
+      "recruitment", "company", "companies", "career", "placement department", "campus drive", "interview", "hiring"
+    ]
+  },
+  {
+    id: "library",
+    label: "Library Resources",
+    icon: "▤",
+    summary: "Central library, book borrowing, digital repository, and reading rooms.",
+    facts: [
+      "Students may access central library resources according to the library's timings and regulations.",
+      "The university library offers textbooks, reference volumes, research journals, IEEE/ACM digital databases, and quiet study areas.",
+      "Exact opening hours and holiday schedules are posted at the library entrance and on the university portal."
+    ],
+    triggers: [
+      "library", "book", "books", "journal", "journals", "reading", "reading room", "borrow",
+      "librarian", "library timing", "library hours", "digital library", "research paper"
+    ]
+  },
+  {
+    id: "hostel",
+    label: "Hostel & Living",
+    icon: "⌂",
+    summary: "Hostel accommodation, warden, mess complaints, and administration.",
+    facts: [
+      "Hostel-related complaints should be submitted to the Hostel Administration and the designated Chief Warden.",
+      "Presidency University provides separate hostel facilities for boys and girls with furnished rooms, mess dining, Wi-Fi, and 24/7 campus security.",
+      "Room allotments, mess menus, and maintenance requests are managed directly through the hostel administration office."
+    ],
+    triggers: [
+      "hostel", "complaint", "complaints", "mess", "food", "room", "warden", "chief warden",
+      "hostel administration", "dorm", "accommodation", "stay"
+    ]
+  },
+  {
+    id: "administration",
+    label: "Administration & Records",
+    icon: "⬡",
+    summary: "Certificates, student records, bonafide letters, and administrative services.",
+    facts: [
+      "Students may contact the respective administrative office for certificates, bonafide letters, fee receipts, ID cards, and student records.",
+      "Requests for transcripts, transfer certificates (TC), and migration certificates must be submitted to the Registrar / Student Affairs administrative counter."
+    ],
+    triggers: [
+      "admin", "administration", "certificate", "certificates", "bonafide", "transcript", "transcripts",
+      "records", "student records", "office", "tc", "document", "documents", "id card", "registrar"
+    ]
+  },
+  {
+    id: "events",
+    label: "Events & Technopia",
+    icon: "✦",
+    summary: "University fests, TECHNOPIA 2.0, technical workshops, and student clubs.",
+    facts: [
+      "University event announcements are shared through official communication channels and university notice boards.",
+      "TECHNOPIA 2.0 is the premier technical fest organized by the School of Computer Science & Engineering (featuring hackathons, coding challenges, and 'Build It in 60 Minutes').",
+      "Students can participate in various student clubs, cultural fests, sports tournaments, and workshops throughout the academic year."
+    ],
+    triggers: [
+      "event", "events", "fest", "fests", "technopia", "technopia 2", "announcement", "workshop",
+      "workshops", "seminar", "seminars", "hackathon", "cultural", "competition", "clubs"
+    ]
+  },
+  {
+    id: "campus",
+    label: "Campus Facilities",
+    icon: "🏫",
+    summary: "Labs, cafeteria, sports complex, transport buses, and healthcare.",
+    facts: [
+      "Presidency University features a green sprawling campus equipped with high-tech computer labs, engineering workshops, and smart multimedia classrooms.",
+      "Campus amenities include food courts, cafes, an ATM, medical infirmary, sports grounds for football, basketball, and cricket, and dedicated university bus transport across Bengaluru."
+    ],
+    triggers: [
+      "facilities", "bus", "transport", "cafeteria", "canteen", "sports", "ground", "gym", "medical",
+      "doctor", "infirmary", "atm", "wi-fi", "wifi", "labs"
+    ]
+  }
+];
+
+const UNSUPPORTED_QUERIES = [
+  "exact date", "exact time", "my next exam", "when is my next", "what date is", "exam date", "date of exam",
+  "phone number", "mobile number", "contact number", "phone no", "mobile no", "email address", "email id",
+  "how much fee", "hostel fee", "tuition fee", "fee amount", "room number", "marks", "sgpa", "cgpa",
+  "my score", "library closing time", "library opening", "what time does", "salary", "package", "stipend",
+  "attendance percentage", "cutoff", "minimum percentage"
+];
+
+/* Normalization and regex-based retrieval */
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+
+function looksUnsupported(query) {
+  const q = query.toLowerCase();
+  return UNSUPPORTED_QUERIES.some(phrase => q.includes(phrase));
 }
-function localAnswer(query){
-  const hits=retrieve(query),bad=NO.some(p=>query.toLowerCase().includes(p));
-  if(bad||!hits.length)return{ok:true,status:"unavailable",sources:hits.map(h=>h.label),model:"built-in grounded engine",
-    answer:"That specific detail is not in the supplied campus data, so I will not invent it. I can guide you on academics, examinations, placements, hostel, library, administration, attendance and events. For personal dates or unpublished numbers, please use official university channels."};
-  return{ok:true,status:"grounded",sources:hits.map(h=>h.label),model:"built-in grounded engine",answer:hits[0].fact};
+
+function retrieve(query) {
+  const q = norm(query);
+  const scored = [];
+  for (const item of PRESIDENCY_KNOWLEDGE) {
+    let score = 0;
+    if (new RegExp("\\b" + esc(item.id) + "\\b").test(q) || new RegExp("\\b" + esc(item.label.toLowerCase()) + "\\b").test(q)) {
+      score += 5;
+    }
+    for (const t of item.triggers) {
+      if (new RegExp("\\b" + esc(t) + "\\b").test(q)) {
+        score += t.includes(" ") ? 3.5 : 1.8;
+      }
+    }
+    if (score > 0) scored.push({ score, item });
+  }
+  scored.sort((a, b) => b.score - a.score);
+  if (!scored.length) return [];
+  const top = scored[0].score;
+  return scored.slice(0, 3).filter(p => p.score >= top * 0.45).map(p => p.item);
 }
-async function getAnswer(query){
-  try{
-    const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
-    if(r.ok){const d=await r.json();return{ok:true,status:d.status,sources:(d.sources||[]).map(s=>s.label),model:d.model,answer:d.answer};}
-  }catch(e){}
-  return localAnswer(query);
+
+function localPresidencyAI(query) {
+  const hits = retrieve(query);
+  const unsupported = looksUnsupported(query) || !hits.length;
+
+  if (unsupported) {
+    let specificNote = "That specific detail (such as exact personal dates, personal fee records, or unpublished contact numbers) is not in the supplied campus data.";
+    if (/exam/i.test(query) && /date/i.test(query)) {
+      specificNote = "Exact individual examination dates and personal hall tickets are published through official university channels and the student portal. I do not invent personal dates.";
+    } else if (/phone|mobile|email|contact/i.test(query)) {
+      specificNote = "Personal phone numbers and private email addresses are not listed in this dataset. Please contact the respective university office directly.";
+    } else if (/fee|cost|how much/i.test(query)) {
+      specificNote = "Individual student fee structures and account balances are managed via the university finance portal and cannot be disclosed here.";
+    }
+
+    return {
+      ok: true,
+      status: "unavailable",
+      sources: hits.map(h => h.label),
+      model: "Presidency Grounded Engine",
+      answer: `${specificNote} I can guide you on academics, admissions, faculty advisors, examination timetables, placements, central library, hostel, administration, and campus facilities. For personal records, please log in to the official Presidency University Student Portal.`
+    };
+  }
+
+  const top = hits[0];
+  let answerText = top.facts.join(" ");
+
+  // Conversational polish
+  if (top.id === "academics") {
+    answerText = `For academic assistance at Presidency University, you should contact your assigned Faculty Advisor. They assist with course enrollment, mentorship, and academic queries. ${top.facts[1]}`;
+  } else if (top.id === "examinations") {
+    answerText = `Examination timetables and schedules at Presidency University are published through official university channels and the student portal. ${top.facts[0]} Note: personal dates or individual hall tickets are accessed directly on the student ERP.`;
+  } else if (top.id === "placements") {
+    answerText = `The Placement Department (Career Services Center) at Presidency University manages corporate training and campus recruitment. ${top.facts[1]}`;
+  } else if (top.id === "hostel") {
+    answerText = `Hostel-related concerns or complaints should be submitted to the Hostel Administration and the Chief Warden. ${top.facts[1]}`;
+  } else if (top.id === "attendance") {
+    answerText = `Presidency University requires students to maintain the minimum prescribed attendance for both theory and practical classes. Individual attendance records are tracked on the student ERP portal.`;
+  }
+
+  return {
+    ok: true,
+    status: "grounded",
+    sources: hits.map(h => h.label),
+    model: "Presidency Grounded Engine",
+    answer: answerText
+  };
 }
-const log=document.getElementById("log"),input=document.getElementById("q");
-function add(text,cls){log.querySelector(".empty")?.remove();const d=document.createElement("div");d.className="msg "+cls;d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d;}
-async function ask(query){
-  add(query,"user");
-  const r=await getAnswer(query);
-  const b=add(r.answer,"bot"+(r.status==="unavailable"?" na":""));
-  const m=document.createElement("span");m.className="meta";
-  const t=document.createElement("span");t.className="tag";t.textContent=r.status==="unavailable"?"Not in campus data":"Grounded";
-  m.append(t,(r.sources.join(", ")||"No source matched")+" \u00b7 "+r.model);b.append(m);
+
+/* =========================================================================
+   OPTIONAL EXTERNAL LLM INTEGRATION (GROQ / GEMINI / OPENAI)
+   ========================================================================= */
+
+async function callLiveLLM(query, keys) {
+  const knowledgeSummary = PRESIDENCY_KNOWLEDGE.map(k => `- ${k.label}: ${k.facts.join(" ")}`).join("\n");
+  const systemPrompt = `You are CAMPUS NEXUS, the official AI helpdesk for Presidency University (Bengaluru, Karnataka).
+Strict rules:
+1. Answer ONLY using the official sample campus information below.
+2. If a student asks for exact personal exam dates, fees, phone numbers, or room numbers, explicitly refuse and explain that it is not available in public sample data.
+3. Keep answers warm, concise (2-4 sentences), and accurate.
+4. Always recommend the relevant office (Faculty Advisor, Placement Department, Hostel Administration, Controller of Examinations).
+
+OFFICIAL PRESIDENCY UNIVERSITY DATA:
+${knowledgeSummary}`;
+
+  // 1. Try Groq
+  if (keys.groq) {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${keys.groq}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: query }
+        ],
+        temperature: 0.2,
+        max_tokens: 280
+      })
+    });
+    if (!res.ok) throw new Error("Groq API error " + res.status);
+    const data = await res.json();
+    return { text: data.choices[0].message.content.trim(), model: "Llama 3.1 8B (Groq Live)" };
+  }
+
+  // 2. Try Gemini
+  if (keys.gemini) {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${keys.gemini}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: "user", parts: [{ text: query }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 280 }
+      })
+    });
+    if (!res.ok) throw new Error("Gemini API error " + res.status);
+    const data = await res.json();
+    return { text: data.candidates[0].content.parts[0].text.trim(), model: "Gemini 2.0 Flash (Live)" };
+  }
+
+  // 3. Try OpenAI
+  if (keys.openai) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${keys.openai}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: query }
+        ],
+        temperature: 0.2,
+        max_tokens: 280
+      })
+    });
+    if (!res.ok) throw new Error("OpenAI API error " + res.status);
+    const data = await res.json();
+    return { text: data.choices[0].message.content.trim(), model: "GPT-4o mini (OpenAI Live)" };
+  }
+
+  throw new Error("No live API keys configured.");
 }
-document.getElementById("form").addEventListener("submit",e=>{e.preventDefault();const q=input.value.trim();if(q){input.value="";ask(q);}});
-const ul=document.getElementById("topics");
-for(const it of K){const li=document.createElement("li"),b=document.createElement("button");b.type="button";b.textContent=it.label;b.onclick=()=>ask("Tell me about "+it.label.toLowerCase());li.append(b);ul.append(li);}
+
+/* =========================================================================
+   CORE DISPATCHER
+   ========================================================================= */
+
+async function getAnswer(query) {
+  const groq = document.getElementById("groqKey")?.value?.trim() || "";
+  const gemini = document.getElementById("geminiKey")?.value?.trim() || "";
+  const openai = document.getElementById("openaiKey")?.value?.trim() || "";
+  const hits = retrieve(query);
+  const unsupported = looksUnsupported(query) || !hits.length;
+
+  // 1. Try local Flask backend if running (/api/ask)
+  try {
+    const backendRes = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, groqKey: groq, geminiKey: gemini, openaiKey: openai })
+    });
+    if (backendRes.ok) {
+      const d = await backendRes.json();
+      return {
+        ok: true,
+        status: d.status,
+        sources: (d.sources || []).map(s => s.label),
+        model: d.model,
+        answer: d.answer
+      };
+    }
+  } catch (e) {
+    // Backend not running, proceed to client-side AI engine
+  }
+
+  // 2. If user configured live LLM keys and question is not explicitly unsupported
+  if ((groq || gemini || openai) && !unsupported) {
+    try {
+      const llmResult = await callLiveLLM(query, { groq, gemini, openai });
+      return {
+        ok: true,
+        status: "grounded",
+        sources: hits.map(h => h.label),
+        model: llmResult.model,
+        answer: llmResult.text
+      };
+    } catch (err) {
+      console.warn("Live LLM failed, using built-in Presidency AI engine:", err);
+    }
+  }
+
+  // 3. Built-in instant grounded engine
+  return localPresidencyAI(query);
+}
+
+/* =========================================================================
+   UI & INTERACTION CONTROLLER
+   ========================================================================= */
+
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("q");
+const sendBtn = document.getElementById("sendBtn");
+
+function addMessage(text, cls, metaInfo = null) {
+  const d = document.createElement("div");
+  d.className = "msg " + cls;
+  d.textContent = text;
+
+  if (metaInfo) {
+    const m = document.createElement("div");
+    m.className = "meta";
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = metaInfo.status === "unavailable" ? "Not in campus data" : "Presidency Grounded";
+    m.append(tag);
+
+    const srcSpan = document.createElement("span");
+    srcSpan.textContent = (metaInfo.sources?.length ? metaInfo.sources.join(", ") : "No source matched") + " · " + metaInfo.model;
+    m.append(srcSpan);
+
+    d.append(m);
+  }
+
+  log.append(d);
+  log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+async function ask(query) {
+  query = query.trim();
+  if (!query) return;
+
+  addMessage(query, "user");
+  const waitBubble = addMessage("Consulting Presidency University knowledge base…", "bot");
+  sendBtn.disabled = true;
+
+  try {
+    const res = await getAnswer(query);
+    waitBubble.remove();
+    addMessage(res.answer, "bot" + (res.status === "unavailable" ? " unavailable" : ""), res);
+  } catch (err) {
+    waitBubble.remove();
+    addMessage("An unexpected error occurred while processing your question. Please try again.", "bot unavailable");
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+// Form submit
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if (q) {
+    input.value = "";
+    ask(q);
+  }
+});
+
+// Render Sidebar Topics
+const topicsUl = document.getElementById("topics");
+PRESIDENCY_KNOWLEDGE.forEach(item => {
+  const li = document.createElement("li");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "topic-btn";
+  btn.innerHTML = `<span class="icon">${item.icon}</span> <span>${item.label}</span>`;
+  btn.title = item.summary;
+  btn.onclick = () => ask(`Tell me about ${item.label.toLowerCase()} at Presidency University`);
+  li.append(btn);
+  topicsUl.append(li);
+});
+
+// Quick Chips click handler
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const q = chip.getAttribute("data-q");
+    if (q) ask(q);
+  });
+});
+
+// Theme Toggle
+const themeBtn = document.getElementById("themeToggle");
+themeBtn.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("pu_theme", next);
+});
+const savedTheme = localStorage.getItem("pu_theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+
+// Clear Chat
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("Clear consultation history?")) {
+    const messages = log.querySelectorAll(".msg");
+    messages.forEach(m => m.remove());
+  }
+});
+
+// Speech Recognition (Voice input)
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRec) {
+  const micBtn = document.getElementById("mic");
+  micBtn.hidden = false;
+  micBtn.addEventListener("click", () => {
+    try {
+      const rec = new SpeechRec();
+      rec.lang = "en-IN";
+      micBtn.style.color = "#ef4444";
+      rec.onresult = (e) => {
+        input.value = e.results[0][0].transcript;
+        input.focus();
+      };
+      rec.onend = () => { micBtn.style.color = ""; };
+      rec.onerror = () => { micBtn.style.color = ""; };
+      rec.start();
+    } catch (e) {
+      micBtn.style.color = "";
+    }
+  });
+}
 </script>
+
 </body>
 </html>

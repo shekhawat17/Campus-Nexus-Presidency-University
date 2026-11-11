@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CAMPUS NEXUS · Presidency University AI Helpdesk</title>
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --panel: #ffffff;
+      --panel-alt: #f8fafc;
+      --ink: #0f172a;
+      --ink-secondary: #475569;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0f766e;
+      --accent-light: #ccfbf1;
+      --accent-dark: #115e59;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --amber-border: #fcd34d;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --radius: 12px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --panel: #131c31;
+      --panel-alt: #1a253e;
+      --ink: #f1f5f9;
+      --ink-secondary: #cbd5e1;
+      --muted: #94a3b8;
+      --line: #22304d;
+      --accent: #2dd4bf;
+      --accent-light: #134e48;
+      --accent-dark: #14b8a6;
+      --amber: #f59e0b;
+      --amber-bg: #322108;
+      --amber-border: #78350f;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1120;
+        --panel: #131c31;
+        --panel-alt: #1a253e;
+        --ink: #f1f5f9;
+        --ink-secondary: #cbd5e1;
+        --muted: #94a3b8;
+        --line: #22304d;
+        --accent: #2dd4bf;
+        --accent-light: #134e48;
+        --accent-dark: #14b8a6;
+        --amber: #f59e0b;
+        --amber-bg: #322108;
+        --amber-border: #78350f;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.3);
+    }
+    .brand-info h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-badge {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .brand-info p {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-icon {
+      background: var(--panel-alt);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-icon:hover { background: var(--line); }
+
+    .layout {
+      max-width: 1140px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 20px 24px;
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .topics-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .topic-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 0.88rem;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .topic-btn:hover {
+      background: var(--panel-alt);
+      border-color: var(--line);
+      color: var(--accent);
+    }
+    .topic-btn span.icon {
+      font-size: 15px;
+      width: 22px;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    .settings-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.84rem;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field-group label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .field-group input {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 0.82rem;
+      color: var(--ink);
+    }
+    .model-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    .chat-section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 580px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .chat-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-alt);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-status-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .log {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      max-height: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(to right, var(--accent-light), var(--panel-alt));
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: var(--ink);
+    }
+    .welcome-banner h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      color: var(--accent-dark);
+    }
+    [data-theme="dark"] .welcome-banner h3 { color: var(--accent); }
+    .welcome-banner p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+    }
+
+    .chips-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--panel-alt);
+    }
+
+    .msg {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      position: relative;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: var(--ink);
+      color: var(--bg);
+      border-bottom-right-radius: 4px;
+    }
+    .msg.bot {
+      align-self: flex-start;
+      background: var(--panel-alt);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.bot.unavailable {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+      color: var(--ink);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+    .unavailable .tag {
+      background: var(--amber-border);
+      color: var(--amber);
+    }
+
+    .composer {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .composer input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 0.92rem;
+      background: var(--bg);
+      color: var(--ink);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .composer input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+    .composer button {
+      padding: 0 18px;
+      height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .composer button:hover { background: var(--accent-dark); }
+    .composer button[type="button"] {
+      background: var(--panel-alt);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 0 12px;
+    }
+    .composer button[type="button"]:hover { background: var(--line); }
+
+    footer {
+      text-align: center;
+      padding: 12px 20px 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: 1fr;
+        margin: 10px auto;
+        padding: 0 12px 20px;
+      }
+      .sidebar { order: 2; }
+      .chat-section { min-height: 480px; }
+      .msg { max-width: 92%; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">PU</div>
+      <div class="brand-info">
+        <h1>CAMPUS NEXUS <span class="brand-badge">Presidency AI</span></h1>
+        <p>AI Helpdesk for Presidency University · Bengaluru, Karnataka</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="themeToggle" title="Toggle Dark/Light Mode">🌓</button>
+      <button class="btn-icon" id="clearBtn" title="Clear Chat">🗑️</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="sidebar">
+    <div class="card">
+      <h2>Presidency Knowledge</h2>
+      <ul class="topics-list" id="topics"></ul>
+    </div>
+
+    <div class="card">
+      <h2>AI Engine Settings</h2>
+      <div class="settings-body">
+        <div class="model-indicator">
+          <span class="status-dot"></span>
+          <span id="activeModelLabel">Presidency University AI Engine</span>
+        </div>
+        <div class="field-group">
+          <label for="groqKey">Groq API Key (Optional)</label>
+          <input id="groqKey" type="password" placeholder="gsk_... (Live Llama 3.1)">
+        </div>
+        <div class="field-group">
+          <label for="geminiKey">Gemini API Key (Optional)</label>
+          <input id="geminiKey" type="password" placeholder="AIza... (Gemini 2.0)">
+        </div>
+        <div class="field-group">
+          <label for="openaiKey">OpenAI API Key (Optional)</label>
+          <input id="openaiKey" type="password" placeholder="sk-... (GPT-4o mini)">
+        </div>
+        <p style="margin:4px 0 0;font-size:0.75rem;color:var(--muted)">Keys remain in your browser session and are never committed or logged.</p>
+      </div>
+    </div>
+  </aside>
+
+  <section class="chat-section">
+    <div class="chat-header">
+      <div class="chat-title">
+        <span>💬 Student Consultation Console</span>
+        <span class="chat-status-pill">Strictly Grounded</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--muted)">Presidency University · CSE</div>
+    </div>
+
+    <div id="log" class="log" aria-live="polite">
+      <div class="welcome-banner">
+        <h3>Welcome to Campus Nexus! 🎓</h3>
+        <p>I am your dedicated AI helpdesk for <strong>Presidency University, Bengaluru</strong>. Ask me anything about academics, admissions, faculty advisors, exams, placements, hostel facilities, the central library, or campus life.</p>
+        <div class="chips-label">Popular student questions:</div>
+        <div class="chips">
+          <button class="chip" data-q="Tell me about Presidency University">About University</button>
+          <button class="chip" data-q="Where is Presidency University campus located?">Campus Location</button>
+          <button class="chip" data-q="Whom should I contact for academic problems?">Academic Advisor</button>
+          <button class="chip" data-q="Where can I find the examination timetable?">Exam Timetable</button>
+          <button class="chip" data-q="What is the minimum attendance requirement?">Attendance Rules</button>
+          <button class="chip" data-q="Whom should I contact for placement training?">Placements</button>
+          <button class="chip" data-q="How can I raise a hostel complaint?">Hostel Help</button>
+          <button class="chip" data-q="What facilities does the Central Library offer?">Central Library</button>
+          <button class="chip" data-q="What is the exact date of my next examination?">My Exam Date (Probe)</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="form" class="composer">
+      <input id="q" placeholder="Type your Presidency University question (e.g. Whom should I contact for academic problems?)" autocomplete="off" required>
+      <button id="mic" type="button" title="Voice Input (Speech to Text)" hidden>🎙️</button>
+      <button type="submit" id="sendBtn">Ask</button>
+    </form>
+  </section>
+</main>
+
+<footer>
+  Built for <strong>TECHNOPIA 2.0 · Build It in 60 Minutes</strong> · School of Computer Science & Engineering, Presidency University, Bengaluru.
+</footer>
+
+<script>
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("q");
+const sendBtn = document.getElementById("sendBtn");
+
+function addMessage(text, cls, metaInfo = null) {
+  const d = document.createElement("div");
+  d.className = "msg " + cls;
+  d.textContent = text;
+
+  if (metaInfo) {
+    const m = document.createElement("div");
+    m.className = "meta";
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = metaInfo.status === "unavailable" ? "Not in campus data" : "Presidency Grounded";
+    m.append(tag);
+
+    const srcSpan = document.createElement("span");
+    srcSpan.textContent = (metaInfo.sources?.length ? metaInfo.sources.map(s => s.label || s).join(", ") : "No source matched") + " · " + (metaInfo.model || "Presidency AI Engine");
+    m.append(srcSpan);
+
+    d.append(m);
+  }
+
+  log.append(d);
+  log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+async function ask(query) {
+  query = query.trim();
+  if (!query) return;
+
+  addMessage(query, "user");
+  const waitBubble = addMessage("Consulting Presidency University knowledge base…", "bot");
+  sendBtn.disabled = true;
+
+  const groq = document.getElementById("groqKey")?.value?.trim() || "";
+  const gemini = document.getElementById("geminiKey")?.value?.trim() || "";
+  const openai = document.getElementById("openaiKey")?.value?.trim() || "";
+
+  try {
+    const r = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, groqKey: groq, geminiKey: gemini, openaiKey: openai })
+    });
+    const data = await r.json();
+    waitBubble.remove();
+    if (data.ok) {
+      addMessage(data.answer, "bot" + (data.status === "unavailable" ? " unavailable" : ""), data);
+    } else {
+      addMessage(data.error || "Unable to answer question.", "bot unavailable");
+    }
+  } catch (err) {
+    waitBubble.remove();
+    addMessage("Could not reach backend server. Please verify app.py is running.", "bot unavailable");
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if (q) {
+    input.value = "";
+    ask(q);
+  }
+});
+
+// Load catalog topics from /api/catalog
+fetch("/api/catalog").then(r => r.json()).then(({ domains }) => {
+  const topicsUl = document.getElementById("topics");
+  domains.forEach(item => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "topic-btn";
+    btn.innerHTML = `<span class="icon">${item.icon || '◈'}</span> <span>${item.label}</span>`;
+    btn.title = item.summary;
+    btn.onclick = () => ask(`Tell me about ${item.label.toLowerCase()} at Presidency University`);
+    li.append(btn);
+    topicsUl.append(li);
+  });
+}).catch(() => {});
+
+// Quick Chips
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const q = chip.getAttribute("data-q");
+    if (q) ask(q);
+  });
+});
+
+// Theme Toggle
+const themeBtn = document.getElementById("themeToggle");
+themeBtn.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("pu_theme", next);
+});
+const savedTheme = localStorage.getItem("pu_theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+
+// Clear Chat
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("Clear consultation history?")) {
+    const messages = log.querySelectorAll(".msg");
+    messages.forEach(m => m.remove());
+  }
+});
+
+// Voice Input
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRec) {
+  const micBtn = document.getElementById("mic");
+  micBtn.hidden = false;
+  micBtn.addEventListener("click", () => {
+    try {
+      const rec = new SpeechRec();
+      rec.lang = "en-IN";
+      micBtn.style.color = "#ef4444";
+      rec.onresult = (e) => {
+        input.value = e.results[0][0].transcript;
+        input.focus();
+      };
+      rec.onend = () => { micBtn.style.color = ""; };
+      rec.onerror = () => { micBtn.style.color = ""; };
+      rec.start();
+    } catch (e) {
+      micBtn.style.color = "";
+    }
+  });
+}
+</script>
+
+</body>
+</html>

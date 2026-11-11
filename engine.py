@@ -1,7 +1,7 @@
-"""Grounded campus helpdesk engine.
+"""Grounded campus helpdesk engine for Presidency University.
 
 Uses an LLM when an API key is available. Always retrieves against the
-sample knowledge only, and refuses facts that are not in that set.
+Presidency University knowledge only, and refuses facts that are not in that set.
 """
 
 from __future__ import annotations
@@ -12,18 +12,18 @@ from typing import Any
 
 import httpx
 
-from knowledge import KNOWLEDGE, knowledge_block
+from knowledge import KNOWLEDGE, UNSUPPORTED_INTENTS, knowledge_block
 
-SYSTEM_PROMPT = """You are CAMPUS NEXUS, the AI helpdesk for a university campus prototype.
+SYSTEM_PROMPT = """You are CAMPUS NEXUS, the official AI helpdesk for Presidency University (Bengaluru, Karnataka).
 
 STRICT GROUNDING RULES:
-- Answer ONLY using the SAMPLE UNIVERSITY INFORMATION below.
-- If the student asks for a fact that is not explicitly present (exact dates, fees, phone numbers, personal schedules, specific library hours, room numbers, marks), say clearly that this is not available in the supplied campus data. Do not invent it.
+- Answer ONLY using the PRESIDENCY UNIVERSITY SAMPLE INFORMATION below.
+- If the student asks for a fact that is not explicitly present (exact individual exam dates, personal fees, phone numbers, personal schedules, specific library opening/closing hours, room numbers, marks, CGPA), say clearly that this is not available in the supplied campus data. Do not invent it.
 - Be warm, concise, and useful. Prefer 2-4 short sentences.
-- Name the relevant office or channel when the sample data includes it.
-- Never claim to be an official university regulation document. This is sample competition data.
+- Name the relevant office or channel (Faculty Advisor, Placement Department, Hostel Administration, Controller of Examinations, Student Affairs).
+- State that this is official sample competition data for Presidency University TECHNOPIA 2.0.
 
-SAMPLE UNIVERSITY INFORMATION:
+PRESIDENCY UNIVERSITY INFORMATION:
 {knowledge}
 """
 
@@ -37,10 +37,10 @@ def retrieve(query: str, limit: int = 3) -> list[dict[str, Any]]:
     scored: list[tuple[float, dict]] = []
     for item in KNOWLEDGE:
         score = 0.0
-        if item["id"] in q or item["label"].lower() in q:
-            score += 5
+        if re.search(rf"\b{re.escape(item['id'])}\b", q) or re.search(rf"\b{re.escape(item['label'].lower())}\b", q):
+            score += 5.0
         for trigger in item["triggers"]:
-            if trigger in q:
+            if re.search(rf"\b{re.escape(trigger)}\b", q):
                 score += 3.2 if " " in trigger else 1.6
         if score > 0:
             scored.append((score, item))
@@ -65,26 +65,7 @@ def retrieve(query: str, limit: int = 3) -> list[dict[str, Any]]:
 
 def looks_unsupported(query: str) -> bool:
     q = query.lower()
-    exact = [
-        "exact date",
-        "exact time",
-        "my next exam",
-        "when is my next",
-        "what date is",
-        "phone number",
-        "mobile number",
-        "email address",
-        "how much fee",
-        "hostel fee",
-        "room number",
-        "library closing time",
-        "library opening",
-        "what time does",
-        "marks",
-        "sgpa",
-        "cgpa",
-    ]
-    return any(phrase in q for phrase in exact)
+    return any(phrase in q for phrase in UNSUPPORTED_INTENTS)
 
 
 def local_answer(query: str, hits: list[dict[str, Any]]) -> tuple[str, str]:
@@ -93,8 +74,8 @@ def local_answer(query: str, hits: list[dict[str, Any]]) -> tuple[str, str]:
         return (
             "That specific detail is not in the supplied campus data, so I will not invent it. "
             "I can guide you using the official sample information for academics, examinations, "
-            "placements, hostel, library, administration, attendance, and events. "
-            "For personal dates or unpublished numbers, please use official university channels.",
+            "placements, hostel, library, administration, attendance, events, and campus facilities. "
+            "For personal dates, fee balances, or unpublished numbers, please use official university channels and the student portal.",
             "unavailable",
         )
 
@@ -119,7 +100,7 @@ def local_answer(query: str, hits: list[dict[str, Any]]) -> tuple[str, str]:
     elif top["id"] == "hostel":
         text = (
             "Hostel-related complaints should be submitted to the Hostel Administration. "
-            "No other hostel procedure is listed in the supplied information."
+            f"{facts}"
         )
     elif top["id"] == "library":
         text = (
@@ -139,7 +120,15 @@ def local_answer(query: str, hits: list[dict[str, Any]]) -> tuple[str, str]:
     elif top["id"] == "events":
         text = (
             "University event announcements are shared through official communication channels. "
-            "I do not have a live events calendar in this dataset."
+            f"{facts}"
+        )
+    elif top["id"] == "about":
+        text = (
+            f"Presidency University overview: {facts}"
+        )
+    elif top["id"] == "campus":
+        text = (
+            f"Presidency University campus facilities: {facts}"
         )
     else:
         text = facts
@@ -231,8 +220,12 @@ def answer(query: str, runtime_key: dict[str, str] | None = None) -> dict[str, A
 
     model_used = "campus-nexus-grounded-retriever"
     text = None
+    unsupported = looks_unsupported(query) or not hits
+
     try:
-        if groq:
+        if unsupported:
+            pass
+        elif groq:
             text = _groq_chat(query, groq)
             model_used = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant") + " (Groq)"
         elif gemini:
@@ -241,13 +234,12 @@ def answer(query: str, runtime_key: dict[str, str] | None = None) -> dict[str, A
         elif openai:
             text = _openai_chat(query, openai)
             model_used = os.getenv("OPENAI_MODEL", "gpt-4o-mini") + " (OpenAI)"
-    except Exception as exc:
+    except Exception:
         text = None
-        fallback_note = str(exc)
 
     if not text:
         text, _ = local_answer(query, hits)
-        if groq or gemini or openai:
+        if (groq or gemini or openai) and not unsupported:
             text += "\n\n(Live model call failed, so this answer used the grounded fallback engine.)"
 
     status = "grounded" if hits and not looks_unsupported(query) else "unavailable"
